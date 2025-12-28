@@ -1,0 +1,23 @@
+<?php
+
+namespace {{ namespace }};
+
+use App\Http\Resources\Base\BaseJsonResource;
+
+class {{ class }} extends BaseJsonResource
+{
+    protected static function relations(): array
+    {
+        return [
+
+        ];
+    }
+
+    public function toArray($request): array
+    {
+        return [
+            'id' => $this->id,
+
+        ];
+    }
+}

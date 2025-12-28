@@ -1,0 +1,34 @@
+<?php
+
+namespace App\Filters;
+
+
+use App\Filters\Main\BaseFilter;
+use Illuminate\Database\Eloquent\Builder;
+
+
+class {{name}}Filter extends BaseFilter
+{
+   protected function attributesMap(): array
+   {
+        return [
+            //key => value,
+        ];
+   }
+
+   protected function search(Builder $builder, string $keyword): Builder
+   {
+          return $builder;
+   }
+
+   function defaultOrder(Builder $builder): Builder
+   {
+        return parent::addOrder($builder, 'id');
+   }
+
+   protected function TableName(): string
+   {
+        return '';
+   }
+
+}

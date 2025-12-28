@@ -1,0 +1,65 @@
+<?php
+
+namespace {{ namespace }};
+
+use {{ rootNamespace }}Filters\{{ model }}Filter;
+use {{ rootNamespace }}Http\Controllers\Base\BaseController;
+use {{ rootNamespace }}Http\Requests\{{ model }}\{{ model }}Request;
+use {{ rootNamespace }}Http\Resources\{{ model }}\{{ model }}Light;
+use {{ rootNamespace }}Http\Resources\{{ model }}\{{ model }}List;
+use {{ rootNamespace }}Http\Resources\{{ model }}\{{ model }}Details;
+use {{ rootNamespace }}Http\Services\{{ model }}Service;
+use {{ namespacedModel }};
+
+class {{ class }} extends BaseController
+{
+    private {{ model }}Service ${{ modelVariable }}Service;
+
+    public function __construct({{ model }}Service ${{ modelVariable }}Service)
+    {
+        $this->{{ modelVariable }}Service = ${{ modelVariable }}Service;
+
+        $this->middleware('auth:sanctum');
+        $this->authorizeResource({{ model }}::class);
+    }
+
+    public function index({{ model }}Filter $filter)
+    {
+        $query = $this->{{ modelVariable }}Service->getAll($filter);
+
+        $light = request('light', 0);
+        if ($light == 'true' || $light == 1) {
+            return {{ model }}Light::query($query);
+        }
+
+        return {{ model }}List::query($query);
+    }
+
+    public function store({{ model }}Request $request): {{ model }}Details
+    {
+        ${{ modelVariable }} = $this->{{ modelVariable }}Service->create($request->getData());
+
+        return new {{ model }}Details(${{ modelVariable }});
+    }
+
+    public function show(mixed $id): {{ model }}Details
+    {
+        ${{ modelVariable }} = $this->{{ modelVariable }}Service->find($id);
+
+        return new {{ model }}Details(${{ modelVariable }});
+    }
+
+    public function update(mixed $id, {{ model }}Request $request): {{ model }}Details
+    {
+        ${{ modelVariable }} = $this->{{ modelVariable }}Service->update($id, $request->getData());
+
+        return new {{ model }}Details(${{ modelVariable }});
+    }
+
+    public function destroy(mixed $id)
+    {
+        $this->{{ modelVariable }}Service->delete($id);
+
+        return response()->noContent();
+    }
+}

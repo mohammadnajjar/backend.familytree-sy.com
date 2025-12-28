@@ -1,0 +1,36 @@
+<?php
+
+namespace {{ namespace }};
+
+use App\Enums\Notification\NotificationType;
+use App\Notifications\Base\BaseNotification;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\MailMessage;
+
+class {{ class }} extends BaseNotification
+{
+    use Queueable;
+
+    public function __construct()
+    {
+        //
+    }
+
+    public function getType(): NotificationType
+    {
+        return NotificationType::{{ class }};
+    }
+
+    public function via($notifiable): array
+    {
+        return [];
+    }
+
+    public function toArray($notifiable): array
+    {
+        return [
+            //
+        ];
+    }
+}

@@ -1,0 +1,11 @@
+<?php
+
+namespace {{ namespace }};
+
+use App\Models\Base\BasePivot;
+use Illuminate\Database\Eloquent\Relations\Pivot;
+
+class {{ class }} extends BasePivot
+{
+    //
+}
