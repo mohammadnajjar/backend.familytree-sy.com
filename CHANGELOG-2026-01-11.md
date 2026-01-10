@@ -260,3 +260,63 @@ protected $policies = [
 ```
 
 3. **تأكد من وجود ألبومات بحالة APPROVED** في قاعدة البيانات لتظهر على الموقع.
+
+---
+
+## 🌐 تعديلات Frontend
+
+### tree_website (موقع الويب)
+
+#### 1. إضافة حقول كلمة السر لنموذج طلب الانضمام
+
+**الملفات المعدّلة:**
+- `tree_website/src/types/auth/request.ts` - إضافة `password` و `password_confirmation`
+- `tree_website/src/pages/Auth/FirstOrder.tsx` - إضافة حقول الإدخال
+
+**التغييرات:**
+```typescript
+// في JoinFormData
+password: string;
+password_confirmation: string;
+```
+
+```tsx
+// في الفورم - حقول جديدة
+<InputBlock label="كلمة السر">
+  <Input type="password" name="password" ... />
+</InputBlock>
+<InputBlock label="تأكيد كلمة السر">
+  <Input type="password" name="password_confirmation" ... />
+</InputBlock>
+```
+
+---
+
+### family_tree_dashboard (لوحة التحكم)
+
+#### 1. إصلاح نوع Photograph لإظهار الحالة
+
+**الملف:** `family_tree_dashboard/src/types/photograph/response.ts`
+
+**التغيير:**
+```typescript
+export interface IPhotograph extends IBaseModel {
+  // ... existing fields
+  status?: number;  // ← أُضيف
+};
+```
+
+---
+
+## 📊 حالة الميزات النهائية
+
+| الميزة | Backend | Dashboard | Website |
+|--------|---------|-----------|---------|
+| الإنجازات | ✅ | ✅ | ✅ |
+| الأحداث التاريخية | ✅ | ✅ | ✅ |
+| الألبومات | ✅ | ✅ | ✅ |
+| أحداث اللجان | ✅ | ✅ | ✅ |
+| إدارة المستخدمين | ✅ | ⚠️ (يستخدم Members) | - |
+| التبرعات | ✅ | ✅ | ✅ |
+| طلبات الانضمام | ✅ | ✅ | ✅ (+ كلمة السر) |
+| العقد | ✅ | ✅ | ✅ |
