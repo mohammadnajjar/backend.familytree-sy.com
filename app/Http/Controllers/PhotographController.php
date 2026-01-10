@@ -13,6 +13,7 @@ use App\Http\Services\NotificationService;
 use App\Http\Services\PhotographService;
 use App\Models\Photograph;
 use App\Notifications\NewPhotographNotification;
+use App\Enums\Photograph\PhotographStatus;
 
 class PhotographController extends BaseController
 {
@@ -31,8 +32,12 @@ class PhotographController extends BaseController
     public function index(PhotographFilter $filter)
     {
         // Allow public access - no authorization needed
-
         $query = $this->photographService->getAll($filter);
+
+        // Filter for public display: show only approved items for unauthenticated users
+        if (!auth()->check()) {
+            $query->where('status', PhotographStatus::APPROVED->value);
+        }
 
         $light = request('light', 0);
         if ($light == 'true' || $light == 1) {
@@ -80,14 +85,14 @@ class PhotographController extends BaseController
     public function show(mixed $id): PhotographDetails
     {
         $photograph = $this->photographService->find($id);
-        $this->authorize('view', $photograph);
+        // Allow public access - no authorization needed for viewing
 
         return new PhotographDetails($photograph);
     }
 
     public function update(mixed $id, PhotographRequest $request): PhotographDetails
     {
-        $photograph = $this->donationService->find($id);
+        $photograph = $this->photographService->find($id);
         $this->authorize('update', $photograph);
         $photograph = $this->photographService->update($id, $request->getData());
 
@@ -96,8 +101,7 @@ class PhotographController extends BaseController
 
     public function destroy(mixed $id)
     {
-
-        $photograph = $this->donationService->find($id);
+        $photograph = $this->photographService->find($id);
         $this->authorize('delete', $photograph);
         $this->photographService->delete($id);
 

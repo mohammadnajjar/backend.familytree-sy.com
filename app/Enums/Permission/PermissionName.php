@@ -118,4 +118,12 @@ enum PermissionName: string
     case CAN_UPDATE_JOIN_REQUESTS = 'can_update_join_requests';
     case CAN_DELETE_JOIN_REQUESTS = 'can_delete_join_requests';
     // </editor-fold>
+
+    // <editor-fold default-state="collapsed" desc="Users Management">
+    case CAN_CREATE_USERS = 'can_create_users';
+    case CAN_VIEW_ALL_USERS = 'can_view_all_users';
+    case CAN_VIEW_USERS = 'can_view_users';
+    case CAN_UPDATE_USERS = 'can_update_users';
+    case CAN_DELETE_USERS = 'can_delete_users';
+    // </editor-fold>
 }

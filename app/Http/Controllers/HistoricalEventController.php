@@ -66,14 +66,14 @@ class HistoricalEventController extends BaseController
     public function show(mixed $id): HistoricalEventDetails
     {
         $historicalEvent = $this->historicalEventService->find($id);
-        $this->authorize('view', $historicalEvent);
+        // Allow public access - no authorization needed for viewing
 
         return new HistoricalEventDetails($historicalEvent);
     }
 
     public function update(mixed $id, HistoricalEventRequest $request): HistoricalEventDetails
     {
-        $historicalEvent = $this->donationService->find($id);
+        $historicalEvent = $this->historicalEventService->find($id);
         $this->authorize('update', $historicalEvent);
         $historicalEvent = $this->historicalEventService->update($id, $request->getData());
 
@@ -82,7 +82,7 @@ class HistoricalEventController extends BaseController
 
     public function destroy(mixed $id)
     {
-        $historicalEvent = $this->donationService->find($id);
+        $historicalEvent = $this->historicalEventService->find($id);
         $this->authorize('delete', $historicalEvent);
         $this->historicalEventService->delete($id);
 

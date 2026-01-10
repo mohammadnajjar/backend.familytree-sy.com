@@ -15,6 +15,7 @@ use App\Http\Controllers\NodeController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PhotographController;
 use App\Http\Controllers\RequestJoinController;
+use App\Http\Controllers\UserController;
 use App\Http\Services\NotificationService;
 use App\Notifications\RequestJoinNotification;
 use App\Http\Controllers\PermissionController;
@@ -115,6 +116,11 @@ Route::get('get-member-statistic', [MemberStatisticController::class, 'getMember
 Route::get('get-admin-statistic', [MemberStatisticController::class, 'getAdminStatistics']);
 
 Route::apiResource('members', MemberController::class)->only(['index', 'show']);
+
+/*
+* Users Routes
+*/
+Route::apiResource('users', UserController::class);
 
 /*
 * Cities Routes

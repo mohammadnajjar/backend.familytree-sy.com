@@ -2,19 +2,81 @@
 
 namespace App\Http\Controllers;
 
+use App\Filters\UserFilter;
 use App\Http\Controllers\Base\BaseController;
+use App\Http\Requests\User\UserRequest;
+use App\Http\Resources\User\UserDetails;
+use App\Http\Resources\User\UserList;
+use App\Http\Services\UserService;
+use App\Models\User;
 
 class UserController extends BaseController
 {
-    public function finalizeRequest(int $memberId, bool $approve, RequestJoinService $service)
+    private UserService $userService;
+
+    public function __construct(UserService $userService)
     {
-        $member = Member::findOrFail($memberId);
+        $this->userService = $userService;
+        $this->middleware('auth:sanctum');
+    }
 
-        // نتحقق من الصلاحية
-        $this->authorize('finalizeJoinRequest', $member);
+    public function index(UserFilter $filter)
+    {
+        $this->authorize('viewAny', User::class);
+        $query = $this->userService->getAll($filter);
 
-        $service->finalizeRequest($memberId, $approve);
+        return UserList::query($query);
+    }
 
-        return response()->json(['message' => 'تمت مراجعة الطلب بنجاح']);
+    public function store(UserRequest $request): UserDetails
+    {
+        $this->authorize('create', User::class);
+        $data = $request->getData();
+        $roles = $data['roles'] ?? null;
+        unset($data['roles']);
+
+        $user = $this->userService->create($data);
+
+        if ($roles) {
+            $user->syncRoles($roles);
+        }
+
+        return new UserDetails($user);
+    }
+
+    public function show(mixed $id): UserDetails
+    {
+        $user = $this->userService->find($id);
+        $this->authorize('view', $user);
+
+        return new UserDetails($user);
+    }
+
+    public function update(mixed $id, UserRequest $request): UserDetails
+    {
+        $user = $this->userService->find($id);
+        $this->authorize('update', $user);
+
+        $data = $request->getData();
+        $roles = $data['roles'] ?? null;
+        unset($data['roles']);
+
+        $user = $this->userService->update($id, $data);
+
+        if ($roles) {
+            $user->syncRoles($roles);
+        }
+
+        return new UserDetails($user);
+    }
+
+    public function destroy(mixed $id)
+    {
+        $user = $this->userService->find($id);
+        $this->authorize('delete', $user);
+
+        $this->userService->delete($id);
+
+        return response()->noContent();
     }
 }

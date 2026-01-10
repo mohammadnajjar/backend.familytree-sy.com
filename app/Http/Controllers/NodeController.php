@@ -111,6 +111,8 @@ class NodeController extends BaseController
 
     public function destroy(mixed $id)
     {
+        $node = $this->nodeService->find($id);
+        $this->authorize('delete', $node);
         $this->nodeService->delete($id);
         return response()->noContent();
     }
@@ -137,7 +139,7 @@ class NodeController extends BaseController
 
     public function getChildrenOfNode($id)
     {
-        $this->authorize('viewAny',Node::class);
+        // Allow public access - no authorization needed for viewing tree
         $children = $this->nodeService->getChildren($id);
         return NodeList::collection($children);
     }

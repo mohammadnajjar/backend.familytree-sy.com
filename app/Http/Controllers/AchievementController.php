@@ -67,7 +67,7 @@ class AchievementController extends BaseController
     public function show(mixed $id): AchievementDetails
     {
         $achievement = $this->achievementService->find($id);
-        $this->authorize('view', $achievement);
+        // Allow public access - no authorization needed for viewing
 
         return new AchievementDetails($achievement);
     }
