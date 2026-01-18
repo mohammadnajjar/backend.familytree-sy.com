@@ -42,7 +42,7 @@ class CreatePendingNodeRequest extends BaseFromRequest
                     'birthDate' => ['required', 'date'],
                     'deathDate' => ['nullable', 'date'],
                     'birthPlace' => ['required', 'string', 'max:255'],
-                    'deathPlace' => ['required', 'string', 'max:255'],
+                    'deathPlace' => ['nullable', 'string', 'max:255'],
                     'fatherName' => ['nullable', 'string', 'max:255'],
                     'motherName' => ['nullable', 'string', 'max:255'],
                     'gender' => ['nullable', Rule::in(Gender::values())],
