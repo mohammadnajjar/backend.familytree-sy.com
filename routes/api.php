@@ -120,7 +120,7 @@ Route::get('get-admin-statistic', [MemberStatisticController::class, 'getAdminSt
 */
 Route::apiResource('users', UserController::class);
 
-Route::apiResource('members', MemberController::class)->only(['index', 'show']);
+Route::apiResource('members', MemberController::class)->only(['index', 'show', 'update', 'destroy']);
 
 /*
 * Cities Routes

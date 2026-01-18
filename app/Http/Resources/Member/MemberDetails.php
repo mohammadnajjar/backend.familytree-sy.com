@@ -36,7 +36,7 @@ class MemberDetails extends BaseJsonResource
             'work' => $this->work,
             'numberOfFamilyMembers' => $this->number_of_family_members,
             'personsKnow' => $this->persons_know,
-            'status' => $this->status,
+            'status' => $this->status?->value,
             'bloodType' => $this->blood_type,
             'maritalStatus' => $this->marital_status,
             'user' => new UserDetails($this->whenLoaded('user')),
