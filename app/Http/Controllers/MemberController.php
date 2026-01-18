@@ -38,18 +38,18 @@ class MemberController extends BaseController
 
     public function show(mixed $id)
     {
-        // Find member by id (primary key in database)
-        $member = Member::where('id', $id)->firstOrFail();
-        $this->authorize('view',$member);
+        // Member model uses user_id as primary key, but we receive member.id from frontend
+        // So we need to find by id column explicitly
+        $member = Member::where('id', $id)->with(['user', 'city'])->firstOrFail();
+        $this->authorize('view', $member);
 
         // Get achievements using user_id
         $achievements = Achievement::where('created_by', $member->user_id)->get();
 
-        Log::info("achievements_member",[$achievements]);
-        if ($achievements) {
-            $member['achievements'] = $achievements;
-            Log::info("achievements_member", [$member]);
+        if ($achievements->isNotEmpty()) {
+            $member->achievements = $achievements;
         }
+
         return new MemberDetails($member);
     }
 }
