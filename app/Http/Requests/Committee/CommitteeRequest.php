@@ -26,7 +26,15 @@ class CommitteeRequest extends BaseFromRequest
                     'endAt' => ['required', 'date', 'after_or_equal:startAt'],
                     'status' => ['required', Rule::in(CommitteeStatus::values())],
                     'permissions' => ['nullable', 'array'],
-                    'permissions.*' => ['string', 'exists:permissions,name'],
+                    'permissions.*' => [
+                        'nullable',
+                        'string',
+                        function ($attribute, $value, $fail) {
+                            if ($value !== 'get_all_permissions' && !\DB::table('permissions')->where('name', $value)->exists()) {
+                                $fail("The selected $attribute is invalid.");
+                            }
+                        }
+                    ],
                 ];
         }
     }

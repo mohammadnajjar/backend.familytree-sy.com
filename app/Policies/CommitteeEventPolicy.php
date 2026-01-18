@@ -23,7 +23,19 @@ class CommitteeEventPolicy
 
     public function create(User $user): bool
     {
-        return $user->can(PermissionName::CAN_CREATE_COMMITTEE_EVENTS->value);
+        // Allow if user has explicit permission
+        if ($user->can(PermissionName::CAN_CREATE_COMMITTEE_EVENTS->value)) {
+            return true;
+        }
+
+        // Allow if user is admin
+        if ($user->hasRole('admin')) {
+            return true;
+        }
+
+        // Allow if user is a committee member (will be checked in controller)
+        // Return true here to pass authorization, controller will verify specific committee membership
+        return $user->member !== null;
     }
 
     public function update(User $user, CommitteeEvent $committeeEvent): bool

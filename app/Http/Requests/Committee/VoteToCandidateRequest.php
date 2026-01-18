@@ -20,7 +20,12 @@ class VoteToCandidateRequest extends BaseFromRequest
             case 'POST':
                 return [
                     'committeeId' => ['required', Rule::exists('committees','id')],
-                    'candidateId' => ['required', Rule::exists('members','user_id')],
+                    'candidateId' => [
+                        'required',
+                        'integer',
+                        Rule::exists('committee_members', 'member_id')
+                            ->where('committee_id', $this->input('committeeId'))
+                    ],
                     'status'=>['nullable', Rule::in(MemberStatus::values())],
                 ];
             case 'PUT':

@@ -151,14 +151,14 @@ class CommitteeController extends BaseController
         if (!$member) {
             abort(400, 'Unauthorized');
         }
-        if ($committee->members()->where('member_id', $member->id)->exists()) {
+        if ($committee->members()->where('member_id', $member->user_id)->exists()) {
             abort(400, 'You have already applied to this committee.');
         }
-        $committee->members()->attach($member->id);
+        $committee->members()->attach($member->user_id);
 
         $committeeMember = CommitteeMember::where([
             'committee_id' => $committee->id,
-            'member_id' => $member->id
+            'member_id' => $member->user_id
         ])->first();
 
         $notification = new ApplyToCommitteeNotification($committeeMember, $member);

@@ -50,6 +50,10 @@ class CommitteeService extends CrudService
         $role = Role::create(['name' => 'committee_' . $committee->id]);
 
         if (!empty($permissions)) {
+            // Handle "get_all_permissions" special case
+            if (in_array('get_all_permissions', $permissions)) {
+                $permissions = \Spatie\Permission\Models\Permission::pluck('name')->toArray();
+            }
             $role->syncPermissions($permissions);
         }
 
@@ -67,9 +71,13 @@ class CommitteeService extends CrudService
 
         $role = Role::firstOrCreate(['name' => 'committee_' . $committee->id]);
 
-        if (!empty($permissions)) {
-            $role->syncPermissions($permissions);
+        // Handle "get_all_permissions" special case
+        if (in_array('get_all_permissions', $permissions)) {
+            $permissions = \Spatie\Permission\Models\Permission::pluck('name')->toArray();
         }
+
+        // Always sync permissions (even if empty array to clear permissions)
+        $role->syncPermissions($permissions);
 
         return $committee;
     }
