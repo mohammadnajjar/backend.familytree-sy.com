@@ -29,7 +29,7 @@ class CommitteeEventController extends BaseController
 
     public function index(CommitteeEventFilter $filter)
     {
-        $this->authorize('viewAny', CommitteeEvent::class);
+        // Allow public access - committee events are public information
         $query = $this->committeeEventService->getAll($filter);
 
         $light = request('light', 0);
@@ -53,7 +53,7 @@ class CommitteeEventController extends BaseController
         $isAdmin = $user->hasRole('admin');
 
         $isCommitteeMember = CommitteeMember::where('committee_id', $committeeId)
-            ->where('member_id', optional($user->member)->id)
+            ->where('member_id', optional($user->member)->user_id)
             ->exists();
 
         if (! $isAdmin && ! $isCommitteeMember) {
@@ -68,9 +68,8 @@ class CommitteeEventController extends BaseController
 
     public function show($id): CommitteeEventDetails
     {
+        // Allow public access - committee event details are public
         $event = $this->committeeEventService->find($id);
-        $this->authorize('view', $event);
-
         return new CommitteeEventDetails($event);
     }
 
@@ -92,8 +91,7 @@ class CommitteeEventController extends BaseController
 
     public function getByCommittee($committeeId, CommitteeEventFilter $filter)
     {
-        $this->authorize('viewAny', CommitteeEvent::class);
-
+        // Allow public access - committee events are public information
         $query = $this->committeeEventService->getAllByCommitteeWithFilter($committeeId,$filter);
 
         $light = request('light', 0);
