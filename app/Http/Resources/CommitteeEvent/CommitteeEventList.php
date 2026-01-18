@@ -22,7 +22,7 @@ class CommitteeEventList extends BaseJsonResource
             'title' => $this->title,
             'description' => $this->description,
             'date' => $this->date,
-            'image' => new MediumLight($this->whenLoaded('image')),
+            'image' => $this->image ? new MediumLight($this->image) : null,
             'committee' => new CommitteeLight($this->whenLoaded('committee')),
         ];
     }
