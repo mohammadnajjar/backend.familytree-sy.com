@@ -115,12 +115,12 @@ Route::apiResource('/media', MediumController::class);
 Route::get('get-member-statistic', [MemberStatisticController::class, 'getMemberStatistics']);
 Route::get('get-admin-statistic', [MemberStatisticController::class, 'getAdminStatistics']);
 
-Route::apiResource('members', MemberController::class)->only(['index', 'show']);
-
 /*
 * Users Routes
 */
 Route::apiResource('users', UserController::class);
+
+Route::apiResource('members', MemberController::class)->only(['index', 'show']);
 
 /*
 * Cities Routes

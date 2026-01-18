@@ -14,6 +14,7 @@ class UserDetails extends BaseJsonResource
             'roles.permissions',
             'image',
             'attachment',
+            'member',
         ];
     }
 
@@ -22,10 +23,24 @@ class UserDetails extends BaseJsonResource
         return [
             'id' => $this->id,
             'fullName' => $this->full_name,
+            'firstName' => $this->first_name,
+            'lastName' => $this->last_name,
             'mobile' => $this->mobile,
-            'image' => new MediumLight($this->whenLoaded('image')),
-            'attachment' => new MediumLight($this->whenLoaded('attachment')),
+            'phone' => $this->phone,
+            'email' => $this->email,
+            'note' => $this->note,
+            'status' => $this->status,
+            'image' => $this->image ? new MediumLight($this->image) : null,
+            'attachment' => $this->attachment ? new MediumLight($this->attachment) : null,
             'roles' => RoleList::collection($this->whenLoaded('roles')),
+            'member' => $this->whenLoaded('member', function() {
+                return $this->member ? [
+                    'id' => $this->member->user_id,
+                    'address' => $this->member->address,
+                ] : null;
+            }),
+            'createdAt' => $this->created_at,
+            'updatedAt' => $this->updated_at,
         ];
     }
 }
